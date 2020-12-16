@@ -1,6 +1,7 @@
 import "./App.css";
 
-function App() {
+const App = () => {
+  const stars = 5;
   return (
     <div className="game">
       <div className="help">
@@ -8,15 +9,9 @@ function App() {
       </div>
       <div className="body">
         <div className="left">
-          <div className="star" />
-          <div className="star" />
-          <div className="star" />
-          <div className="star" />
-          <div className="star" />
-          <div className="star" />
-          <div className="star" />
-          <div className="star" />
-          <div className="star" />
+          {utils.range(1, stars).map((starId) => (
+            <div key={starId} className="star" />
+          ))}
         </div>
         <div className="right">
           <button className="number">1</button>
@@ -33,7 +28,7 @@ function App() {
       <div className="timer">Time Remaining: 10</div>
     </div>
   );
-}
+};
 
 // Color Theme
 const colors = {
