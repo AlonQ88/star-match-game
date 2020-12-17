@@ -6,6 +6,21 @@ import utils from "./utils";
 
 const App = () => {
   const [stars, setStars] = useState(utils.random(1, 9));
+  const [availableNumbers, setAvailableNumbers] = useState([1, 2, 3, 4, 5]);
+  const [candidateNumbers, setCandidateNumbers] = useState([2, 3]);
+
+  const candidatesAreWrong = utils.sum(candidateNumbers) > stars;
+
+  const numberStatus = (number) => {
+    if (!availableNumbers.includes(number)) {
+      return "used";
+    }
+    if (candidateNumbers.includes(number)) {
+      return candidatesAreWrong ? "wrong" : "candidate";
+    }
+    return "available";
+  };
+
   return (
     <div className="game">
       <div className="help">
@@ -13,11 +28,15 @@ const App = () => {
       </div>
       <div className="body">
         <div className="left">
-          <StarsDisplay count={stars}/>
+          <StarsDisplay count={stars} />
         </div>
         <div className="right">
           {utils.range(1, 9).map((number) => (
-            <PlayNumber key={number} number={number} />
+            <PlayNumber
+              key={number}
+              number={number}
+              status={numberStatus(number)}
+            />
           ))}
         </div>
       </div>
