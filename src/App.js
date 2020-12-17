@@ -6,8 +6,8 @@ import utils from "./utils";
 
 const App = () => {
   const [stars, setStars] = useState(utils.random(1, 9));
-  const [availableNumbers, setAvailableNumbers] = useState([1, 2, 3, 4, 5]);
-  const [candidateNumbers, setCandidateNumbers] = useState([2, 3]);
+  const [availableNumbers, setAvailableNumbers] = useState(utils.range(1, 9));
+  const [candidateNumbers, setCandidateNumbers] = useState([]);
 
   const candidatesAreWrong = utils.sum(candidateNumbers) > stars;
 
@@ -19,6 +19,28 @@ const App = () => {
       return candidatesAreWrong ? "wrong" : "candidate";
     }
     return "available";
+  };
+
+  const onNumberClick = (number, currentStatus) => {
+    if (currentStatus === "used") {
+      return;
+    }
+    const newCandidateNumbers =
+      currentStatus === "available"
+        ? candidateNumbers.concat(number)
+        : candidateNumbers.filter((cn) => cn !== number);
+
+    candidateNumbers.concat(number);
+    if (utils.sum(newCandidateNumbers) !== stars) {
+      setCandidateNumbers(newCandidateNumbers);
+    } else {
+      const newAvailableNums = availableNumbers.filter(
+        (num) => !newCandidateNumbers.includes(num)
+      );
+      setStars(utils.randomSumIn(newAvailableNums, 9));
+      setAvailableNumbers(newAvailableNums);
+      setCandidateNumbers([]);
+    }
   };
 
   return (
@@ -36,6 +58,7 @@ const App = () => {
               key={number}
               number={number}
               status={numberStatus(number)}
+              onClick={onNumberClick}
             />
           ))}
         </div>
